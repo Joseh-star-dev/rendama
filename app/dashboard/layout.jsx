@@ -52,21 +52,21 @@ export default function DashboardLayout({ children }) {
         {/* Sidebar */}
         <aside
           className={`
-            fixed inset-y-0 left-0 z-30 w-64 bg-white border-r shadow-lg transform transition-transform duration-300 ease-in-out
+            fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-gray-300 shadow-lg transform transition-transform duration-300 ease-in-out
             md:relative md:translate-x-0
             ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
           `}
         >
           <div className="h-full flex flex-col">
             {/* User info */}
-            <div className="p-6 border-b">
+            <div className="p-6 border-b border-gray-300">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
                   {user.username?.[0]?.toUpperCase() ||
                     user.email?.[0]?.toUpperCase()}
                 </div>
                 <div>
-                  <p className="font-medium">{user.username || "User"}</p>
+                  <p className="font-semibold">{user.username || "User"}</p>
                 </div>
               </div>
             </div>

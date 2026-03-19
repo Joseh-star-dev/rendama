@@ -28,6 +28,7 @@ export async function GET(req) {
     }
 
     const properties = await Property.find({ owner: user._id })
+      .collation({ locale: "en", strength: 2 })
       .sort({ createdAt: -1 })
       .lean();
 
@@ -49,7 +50,10 @@ export async function GET(req) {
         { status: 401 },
       );
     }
-    return NextResponse.json({ error: "Server error.Please try again!" });
+    return NextResponse.json(
+      { error: "Server error.Please try again!" },
+      { status: 500 },
+    );
   }
 }
 
@@ -72,49 +76,74 @@ export async function POST(req) {
 
     const { name, location, description, totalUnits } = await req.json();
 
-    if (!name) {
+    if (!name.trim()) {
       return NextResponse.json(
         { error: "Property name is required" },
         { status: 400 },
       );
     }
 
-    if (!location) {
+    if (!location.trim()) {
       return NextResponse.json(
         { error: "Property location is required" },
         { status: 400 },
       );
     }
-    if (!totalUnits) {
+    if (totalUnits < 1) {
       return NextResponse.json(
-        { error: "Number of units is required" },
+        { error: "Total units must be a positive integer" },
         { status: 400 },
       );
     }
 
-    const owner = await User.findById(userId).select("-password");
+    const owner = await User.findById(userId).select("_id name email"); //only what is needed
 
     if (!owner) {
-      return NextResponse.json({ error: "Account not found" }, { status: 401 });
+      return NextResponse.json({ error: "Account not found" }, { status: 404 });
     }
 
     //check if the property already exist
-    const property = new Property({
-      owner: owner,
-      name,
-      location,
-      description,
+    const existing = await Property.findOne({
+      owner: userId,
+      name: name.trim(),
+    }).collation({ locale: "en", strength: 2 });
+
+    if (existing) {
+      return NextResponse.json(
+        { error: "Property name already exists (case-insensitive)" },
+        { status: 409 },
+      );
+    }
+
+    const property = await Property.create({
+      owner: owner._id, //almost always better to store just the ID
+      name: name.trim(),
+      location: location.trim(),
+      description: description?.trim() || "",
       totalUnits,
     });
 
-    await property.save();
-
     return NextResponse.json(
-      { property, message: "Property created" },
+      {
+        success: true,
+        message: "Property created successfully",
+        property,
+      },
       { status: 201 },
     );
-  } catch (error) {
-    console.error(error.message);
-    return NextResponse.json({ error: "Server error!" });
+  } catch (err) {
+    console.error("Property creation error", err.message);
+    if (err.name === "MongoServerError" && err.code === 11000) {
+      return NextResponse.json(
+        { error: "You already have a property with this name." },
+        { status: 409 }, //conflict
+      );
+    }
+
+    //generic server error
+    return NextResponse.json(
+      { error: "Failed to create property" },
+      { status: 500 },
+    );
   }
 }

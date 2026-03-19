@@ -1,46 +1,50 @@
 "use client";
-import React from "react";
+
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
-import { redirect, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { useAuth } from "@/lib/AuthContext";
 
-export default function VerifyNote() {
-  const queryEmail = useSearchParams();
-  const email = queryEmail.get("email");
-
-  const { isAuthenticated } = useAuth();
-  if (isAuthenticated) {
-    return redirect("/login");
-  }
+export default function CheckYourEmail() {
   return (
-    <div className="min-h-screen py-20 px-4 mx-auto max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <motion.div
-        key="step3"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="text-center py-8 space-y-6 px-4 shadow-xl border border-gray-200 rounded-2xl"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-md w-full bg-white shadow-xl border border-gray-200 rounded-2xl p-8 text-center space-y-6"
       >
-        <div className="w-20 h-20 bg-gray-100 border border-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="mx-auto w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center border-4 border-emerald-100">
           <CheckCircle2 className="text-emerald-500" size={40} />
         </div>
+
         <div>
-          <h2 className="text-2xl font-display font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">
             Check your inbox!
           </h2>
-          <p className="text-zinc-800 text-sm leading-relaxed">
-            We've sent a verification link to{" "}
-            <span className="text-gray-950 font-extrabold">{email}</span>.
-            Please click the link to activate your account.
+          <p className="text-gray-600 leading-relaxed">
+            We’ve sent a verification link to your email .
+          </p>
+          <p className="text-sm text-gray-500 mt-3">
+            Click the link in the email to activate your account.
           </p>
         </div>
-        <Link
-          href="/resend-verification"
-          className="text-blue-700 hover:text-blue-600 text-sm font-semibold transition-colors"
-        >
-          Didn't get the email? Resend
-        </Link>
+
+        <div className="pt-4 border-t border-gray-100">
+          <p className="text-sm text-gray-600 mb-2">
+            Didn't receive the email?
+          </p>
+          <Link
+            href="/resend-verification"
+            className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
+          >
+            Resend verification email
+          </Link>
+        </div>
+
+        <div className="text-xs text-gray-500 pt-6">
+          The link expires in 24 hours for security reasons.
+        </div>
       </motion.div>
     </div>
   );

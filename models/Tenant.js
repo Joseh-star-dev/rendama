@@ -2,24 +2,19 @@ import mongoose, { Types } from "mongoose";
 
 const tenantSchema = new mongoose.Schema(
   {
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     name: {
       type: String,
       required: true,
     },
-
     phone: { type: String, required: true },
-
-    unit: {
-      type: Types.ObjectId,
-      ref: "Unit",
-    },
-
+    unitNumber: { type: String, required: true },
     property: {
-      type: Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Property",
     },
-
     moveInDate: Date,
+    rentStatus: { type: String, enum: ["paid", "pending"], default: "pending" },
   },
   { timestamps: true },
 );

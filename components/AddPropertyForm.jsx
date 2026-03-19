@@ -20,19 +20,22 @@ export default function AddPropertyForm({ onclose }) {
     e.preventDefault();
     try {
       await addProperty(form);
-      if (message) {
-        toast.success("Property added");
-      }
     } catch (err) {
       toast.error(err);
     }
   };
 
+  if (message) {
+    toast.success(message);
+  }
+
+  if (error) {
+    toast.error(error);
+  }
   return (
     <main className="mx-auto w-full mt-8">
       <Toaster />
-      {error && <p className="py-2 text-red-500 text-center">{error}</p>}
-      {message && <p className="py-2 text-red-500 text-center">{message}</p>}
+
       <div className="relative bg-white w-90 overflow-hidden p-4 border border-gray-200 rounded-2xl">
         <X
           onClick={() => onclose()}

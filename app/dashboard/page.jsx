@@ -6,11 +6,16 @@ import Loading from "@/components/Loading";
 import { useAuth } from "@/lib/AuthContext";
 import { userLinks } from "@/components/Navbar"; // assuming this exports an array like:
 import { useProperty } from "@/context/PropetyContext";
+import { BuildingIcon, House, HouseIcon } from "lucide-react";
+import { useTenant } from "@/context/TenantContext";
+import { useUnit } from "@/context/UnitsContext";
 // [{ name: "Properties", href: "/dashboard/properties", icon: <BuildingIcon />, count?: number }, ...]
 
 export default function DashboardPage() {
   const { user, isLoading } = useAuth();
   const { properties } = useProperty();
+  const { tenants } = useTenant();
+  const { units } = useUnit();
   const router = useRouter();
 
   // Safe client-side redirect
@@ -46,35 +51,55 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {userLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className={`
-                group relative flex flex-col items-center justify-center
-                p-6 md:p-8 bg-white rounded-xl shadow-sm border border-gray-200
-                hover:shadow-md hover:border-blue-200 transition-all duration-300
-                hover:-translate-y-1 active:scale-98
-              `}
-            >
-              <div className="text-3xl md:text-4xl text-gray-600 group-hover:text-blue-600 mb-3 transition-colors">
-                {link.icon}
-              </div>
+          <Link
+            href="/dashboard/properties"
+            className="hover:border-indigo-500 border border-white flex justify-center items-center flex-col gap-2 p-2 md:p-4 bg-gray-100 shadow rounded-md"
+          >
+            <div className="flex items-center gap-2">
+              <span className="font-semibold">Total property</span>
+              <BuildingIcon size={20} className="text-blue-600" />
+            </div>
+            <p className="font-extrabold text-3xl text-indigo-600">
+              {properties.length ?? 0}
+            </p>
+          </Link>
 
-              <h3 className="font-medium text-gray-800 text-center">
-                {link.name}
-              </h3>
+          <Link
+            href="/dashboard/units"
+            className="hover:border-indigo-500 border border-white flex justify-center items-center flex-col gap-2 p-2 md:p-4 bg-gray-100 shadow rounded-md"
+          >
+            <div className="flex items-center gap-2">
+              <span className="font-semibold">Total Units</span>
+              <HouseIcon size={20} className="text-blue-600" />
+            </div>
+            <p className="font-extrabold text-3xl text-indigo-600">
+              {units.length ?? 0}
+            </p>
+          </Link>
 
-              {/* Dynamic count or placeholder */}
-              {link.count !== undefined ? (
-                <div className="mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
-                  {link.count}
-                </div>
-              ) : (
-                <div className="mt-2 h-6" /> // spacer when no count
-              )}
-            </Link>
-          ))}
+          <Link
+            href="/dashboard/tenants"
+            className="hover:border-indigo-500 border border-white flex justify-center items-center flex-col gap-2 p-2 md:p-4 bg-gray-100 shadow rounded-md"
+          >
+            <div className="flex items-center gap-2">
+              <span className="font-semibold">Total Tenants</span>
+              <BuildingIcon size={20} className="text-blue-600" />
+            </div>
+            <p className="font-extrabold text-3xl text-indigo-600">
+              {tenants.length ?? 0}
+            </p>
+          </Link>
+
+          <Link
+            href="/dashboard/payments"
+            className="hover:border-indigo-500 border border-white flex justify-center items-center flex-col gap-2 p-2 md:p-4 bg-gray-100 shadow rounded-md"
+          >
+            <div className="flex items-center gap-2">
+              <span className="font-semibold">Total Paid</span>
+              <BuildingIcon size={20} className="text-blue-600" />
+            </div>
+            <p className="font-extrabold text-3xl text-indigo-600">{0}</p>
+          </Link>
         </div>
 
         {/* Optional: quick stats or call-to-action row */}

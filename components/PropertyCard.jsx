@@ -44,6 +44,12 @@ export default function PropertyCard({
           {updatedAt}
         </p>
       </div>
+      <div className="flex gap-2 mt-4">
+        <button className="primary-btn py-2">Update</button>
+        <button className="primary-btn py-1 bg-red-500 hover:bg-red-700">
+          Delete
+        </button>
+      </div>
     </div>
   );
 }

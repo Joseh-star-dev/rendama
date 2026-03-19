@@ -31,14 +31,24 @@ export async function GET(req) {
       );
     }
 
-    const properties = await Property.find({ owner: userId });
-    if (!properties || properties.length === 0) {
+    // const properties = await Property.find({ owner: userId });
+    // if (!properties || properties.length === 0) {
+    //   return NextResponse.json({
+    //     message: "Your have not registered any property",
+    //   });
+    // }
+
+    const units = await Unit.find({ unitOwner: userId }).populate("property");
+    if (!units || units.length === 0) {
       return NextResponse.json({
         message: "Your have not registered any property",
       });
     }
-
-    return NextResponse.json(properties);
+    // const allUnits = units.reduce((sum, property) => {
+    //   // Add the properties unit count to the accumulator
+    //   return sum + (property.totalUnits || 0);
+    // }, 0);
+    return NextResponse.json(units);
   } catch (error) {
     console.error("Error getting units", error.message);
     return NextResponse.json({ error: "Server Error!" }, { status: 500 });
@@ -110,7 +120,7 @@ export async function POST(req) {
 
     //check if the unit number already exists fot THIS property.
     const duplicateUnit = await Unit.findOne({
-      property: propertyExits._id,
+      property: propertyExits,
       unitNumber: unitNumber,
     });
 
@@ -119,15 +129,16 @@ export async function POST(req) {
         {
           error: `Unit ${unitNumber} already exists in ${propertyExits.name}`,
         },
-        { status: 400 },
+        { status: 409 },
       );
     }
 
     const unit = await Unit.create({
-      property: propertyExits._id,
+      unitOwner: userId,
+      property: propertyExits,
       unitNumber,
       rent,
-      tenant: tenant || null,
+      tenant: tenant ? tenant : null,
       status,
       dueDay,
     });
