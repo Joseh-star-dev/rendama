@@ -35,12 +35,9 @@ export async function GET(req) {
       "property owner",
     );
     if (!units || units.length === 0) {
-      return NextResponse.json(
-        {
-          message: "Your have not registered any property",
-        },
-        { status: 404 },
-      );
+      return NextResponse.json({
+        message: "Your have not registered any property",
+      });
     }
 
     return NextResponse.json(units);
