@@ -5,7 +5,7 @@ export async function POST(req) {
   const response = NextResponse.json({ message: "Logged out" });
 
   response.cookies.delete("auth-token", { path: "/" });
-  response.cookies.delete("refresh-token", { path: "/" });
+  // response.cookies.delete("refresh-token", { path: "/" });
 
   return response;
 }

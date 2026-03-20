@@ -2,6 +2,7 @@ import { connectDB } from "@/lib/db";
 import { verifyToken } from "@/lib/jwt";
 import { Property } from "@/models/Property";
 import { Tenant } from "@/models/Tenant";
+import { Unit } from "@/models/Unit";
 import { User } from "@/models/User";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -94,9 +95,29 @@ export async function POST(req) {
       );
     }
 
+    if (!property) {
+      return NextResponse.json(
+        { error: "Property name  is required" },
+        { status: 400 },
+      );
+    }
+
     if (!unitNumber) {
       return NextResponse.json(
         { error: "Unit number  is required" },
+        { status: 400 },
+      );
+    }
+
+    const existingTenant = await Tenant.findOne({
+      unitNumber: unitNumber,
+      property: property.name,
+    });
+    if (existingTenant) {
+      return NextResponse.json(
+        {
+          error: "This unit is already occupied by another tenant!",
+        },
         { status: 400 },
       );
     }
@@ -105,12 +126,16 @@ export async function POST(req) {
       owner: userId,
       name,
       phone,
-      unitNumber: unitNumber,
-      property: property.name,
+      unitNumber,
+      property: property._id,
       moveInDate,
     });
 
-    console.log(tenant);
+    //update unit
+    const unit = await Unit.findOneAndUpdate(
+      { unitNumber, property: property._id },
+      { status: "occupied" },
+    );
 
     return NextResponse.json(
       { success: true, message: "Tenant added" },

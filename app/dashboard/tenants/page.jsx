@@ -3,12 +3,21 @@ import AddTenantForm from "@/components/AddTenantForm";
 import { useTenant } from "@/context/TenantContext";
 import Loader from "@/ui/Loader";
 import { PlusIcon, User, Users } from "lucide-react";
-import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 export default function Tenants() {
   const { tenants, loading, error, message } = useTenant();
   const [showForm, setShowForm] = useState(false);
 
+  const searchParams = useSearchParams();
+  const unitNumber = searchParams.get("unitNumber");
+
+  useEffect(() => {
+    if (unitNumber) {
+      setShowForm(true);
+    }
+  }, [unitNumber]);
   if (loading) {
     return (
       <div className="min-h-screen">
@@ -101,7 +110,10 @@ export default function Tenants() {
       </div>
       {showForm && (
         <div className="min-h-screen bg-black/40 fixed inset-0 top-0 mx-auto z-60 py-25 px-2">
-          <AddTenantForm close={() => setShowForm(false)} />
+          <AddTenantForm
+            close={() => setShowForm(false)}
+            unit_number={unitNumber}
+          />
         </div>
       )}
     </main>

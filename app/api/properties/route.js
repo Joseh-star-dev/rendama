@@ -126,7 +126,7 @@ export async function POST(req) {
     return NextResponse.json(
       {
         success: true,
-        message: "Property created successfully",
+        message: `${property.name} has been successfully added`,
         property,
       },
       { status: 201 },

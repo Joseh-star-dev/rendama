@@ -3,31 +3,44 @@ import { useProperty } from "@/context/PropetyContext";
 import { useTenant } from "@/context/TenantContext";
 import { useUnit } from "@/context/UnitsContext";
 import { X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { property } from "zod";
 
-export default function AddTenantForm({ close }) {
+export default function AddTenantForm({ close, unit_number }) {
   const { properties } = useProperty();
   const { units } = useUnit();
   const { addTenant, loading, message, error } = useTenant();
+
   const [form, setForm] = useState({
     name: "",
     phone: "",
-    unitNumber: "",
+    unitNumber: unit_number || "",
     property: "",
     moveInDate: "",
   });
 
+  useEffect(() => {
+    if (!form.property && properties.length > 0) {
+      setForm((prev) => ({ ...prev, property: properties[0].name }));
+    }
+
+    if (!form.unitNumber && units.length > 0 && !unit_number) {
+      setForm((prev) => ({ ...prev, unitNumber: units[0].unitNumber }));
+    }
+  }, [properties, units, unit_number]);
+
   const handleChange = async (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    setForm((prev) => ({ ...prev, [name]: value }));
+    console.log("property number is", form.property);
+    console.log("unit number is", form.unitNumber);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await addTenant(form);
-      alert(message);
     } catch (err) {
       console.error(err);
     }
@@ -36,6 +49,16 @@ export default function AddTenantForm({ close }) {
   return (
     <div className="bg-white px-4 py-6 max-w-md mx-auto rounded-md relative">
       <Toaster />
+      {error && (
+        <p className="text-red-500 text-lg p-2 font-semibold text-center">
+          {error}
+        </p>
+      )}
+      {message && (
+        <p className="text-green-600 font-semibold text-lg p-2 text-center">
+          {message}
+        </p>
+      )}
       <X size={30} onClick={close} className="mb-4 text-gray-700" />
       <h1 className="text-lg mb-5 font-semibold">Add new tenant</h1>
       <form className="space-y-3" onSubmit={handleSubmit}>
@@ -64,23 +87,32 @@ export default function AddTenantForm({ close }) {
         </div>
 
         <div className="">
-          <label className="">Select Unit Number</label>
-          <select
-            name="unitNumber"
-            value={form.unitNumber}
-            onChange={handleChange}
-            className="input-field rounded-md"
-          >
-            {units.length > 0 ? (
-              units.map((u) => (
-                <option key={u._id} value={u.name}>
-                  {u.unitNumber}
-                </option>
-              ))
-            ) : (
-              <option value="">You have not unit yet</option>
-            )}
-          </select>
+          <label className="">Unit Number</label>
+          {unit_number ? (
+            <input
+              type="text"
+              value={unit_number}
+              readOnly
+              className="input-field"
+            />
+          ) : (
+            <select
+              name="unitNumber"
+              value={form.unitNumber}
+              onChange={handleChange}
+              className="input-field rounded-md"
+            >
+              {units.length > 0 ? (
+                units.map((u) => (
+                  <option key={u._id} value={u.unitNumber}>
+                    {u.unitNumber}
+                  </option>
+                ))
+              ) : (
+                <option value="">You have not unit yet</option>
+              )}
+            </select>
+          )}
         </div>
 
         <div className="">
@@ -98,7 +130,7 @@ export default function AddTenantForm({ close }) {
                 </option>
               ))
             ) : (
-              <option value="">You have no property yet!</option>
+              <option value="">No properties available</option>
             )}
           </select>
         </div>

@@ -152,7 +152,7 @@ export default function AddUnitForm({ onClose }) {
         {/* Tenant */}
         <div>
           <label className="block mb-1.5 text-sm font-medium text-gray-700">
-            Current Tenant (optional)
+            Current Tenant (You can skip and add later)
           </label>
           <div className="relative">
             <User
@@ -165,9 +165,6 @@ export default function AddUnitForm({ onClose }) {
               onChange={handleChange}
               className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
             >
-              <option value="" disabled>
-                Select Tenant here
-              </option>
               {tenants.length > 0 ? (
                 tenants.map((t) => (
                   <option value={t.name} key={t._id}>
@@ -176,7 +173,9 @@ export default function AddUnitForm({ onClose }) {
                 ))
               ) : (
                 <>
-                  <option value="tenant">New Tenant</option>
+                  <option value="" disabled>
+                    You have not tenants skip
+                  </option>
                 </>
               )}
             </select>

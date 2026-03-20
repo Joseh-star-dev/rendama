@@ -3,7 +3,7 @@ import ButtonLoading from "@/components/ButtonLoading";
 import Loading from "@/components/Loading";
 import { useAuth } from "@/lib/AuthContext";
 import { Key, Mail } from "lucide-react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -12,6 +12,7 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
+  const router = useRouter();
   const { user, isLoading, error, message, login } = useAuth();
   const [loading, setLoading] = useState(false);
   const handleChange = (e) => {
@@ -26,6 +27,7 @@ export default function LoginPage() {
       if (message) {
         toast.success(message);
       }
+      router.push("/dashboard");
     } catch (err) {
       console.error(err);
     } finally {

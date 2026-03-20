@@ -42,7 +42,7 @@ export function TenantProvider({ children }) {
       setTimeout(() => {
         setError("");
         setLoading(false);
-      }, 1200);
+      }, 1800);
     }
 
     const deleteTenant = async (id) => {

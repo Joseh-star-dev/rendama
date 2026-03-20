@@ -58,7 +58,7 @@ export function UnitProvider({ children }) {
       const res = await api.put(`/units/${id}`, form);
       setMessage(res.data.message);
       const updatedUnits = await api.get("/units");
-      setUnits(res.data);
+      setUnits(updatedUnits.data);
       return true;
     } catch (err) {
       console.error(err);
@@ -77,7 +77,7 @@ export function UnitProvider({ children }) {
       const res = await api.put(`/units/${id}`);
       setMessage(res.data.message);
       const updatedUnits = await api.get("/units");
-      setUnits(res.data);
+      setUnits(updatedUnits.data);
       return true;
     } catch (err) {
       console.error(err);

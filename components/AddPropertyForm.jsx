@@ -1,6 +1,6 @@
 "use client";
 import { useProperty } from "@/context/PropetyContext";
-import { Building2Icon, Map, MapIcon, X } from "lucide-react";
+import { Building2Icon, CheckLineIcon, Map, MapIcon, X } from "lucide-react";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import ButtonLoading from "./ButtonLoading";
@@ -25,17 +25,20 @@ export default function AddPropertyForm({ onclose }) {
     }
   };
 
-  if (message) {
-    toast.success(message);
-  }
-
-  if (error) {
-    toast.error(error);
-  }
   return (
     <main className="mx-auto w-full mt-8">
-      <Toaster />
-
+      {message && (
+        <div className="px-6 py-2 text-sm text-white font-bold shadow-md bg-green-700 flex  gap-2 justify-center">
+          <CheckLineIcon />
+          <span>{message}</span>
+        </div>
+      )}
+      {error && (
+        <div className="px-6 py-2 text-sm text-white font-bold shadow-md bg-red-600 flex  gap-2 justify-center">
+          <CheckLineIcon />
+          <span>{error}</span>
+        </div>
+      )}
       <div className="relative bg-white w-90 overflow-hidden p-4 border border-gray-200 rounded-2xl">
         <X
           onClick={() => onclose()}

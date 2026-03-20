@@ -2,7 +2,7 @@ import mongoose, { Types } from "mongoose";
 
 const unitSchema = new mongoose.Schema(
   {
-    unitOwner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     property: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Property",
@@ -10,7 +10,11 @@ const unitSchema = new mongoose.Schema(
     },
     unitNumber: { type: String, required: true, unique: true },
     rent: { type: Number, required: true },
-    tenant: { type: String },
+    tenant: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Tenant",
+      default: null,
+    },
     status: { type: String, enum: ["vacant", "occupied", "maintenance"] },
     dueDay: {
       type: Date,

@@ -31,23 +31,18 @@ export async function GET(req) {
       );
     }
 
-    // const properties = await Property.find({ owner: userId });
-    // if (!properties || properties.length === 0) {
-    //   return NextResponse.json({
-    //     message: "Your have not registered any property",
-    //   });
-    // }
-
-    const units = await Unit.find({ unitOwner: userId }).populate("property");
+    const units = await Unit.find({ owner: user._id }).populate(
+      "property owner",
+    );
     if (!units || units.length === 0) {
-      return NextResponse.json({
-        message: "Your have not registered any property",
-      });
+      return NextResponse.json(
+        {
+          message: "Your have not registered any property",
+        },
+        { status: 404 },
+      );
     }
-    // const allUnits = units.reduce((sum, property) => {
-    //   // Add the properties unit count to the accumulator
-    //   return sum + (property.totalUnits || 0);
-    // }, 0);
+
     return NextResponse.json(units);
   } catch (error) {
     console.error("Error getting units", error.message);
@@ -114,7 +109,7 @@ export async function POST(req) {
         {
           error: "Property not found. Create the property first!",
         },
-        { status: 404 },
+        { status: 400 },
       );
     }
 
@@ -134,11 +129,11 @@ export async function POST(req) {
     }
 
     const unit = await Unit.create({
-      unitOwner: userId,
+      owner: userId,
       property: propertyExits,
       unitNumber,
       rent,
-      tenant: tenant ? tenant : null,
+      tenant: tenant ? tenant._id : null,
       status,
       dueDay,
     });

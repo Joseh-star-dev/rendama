@@ -33,7 +33,7 @@ export function PropertyProvider({ children }) {
     setLoading(true);
     try {
       const res = await api.post("/properties", form);
-      setMessage("property added");
+      setMessage(res.data.message);
       const newProperties = await api.get("/properties");
       setProperties(newProperties.data);
       return true;
@@ -77,7 +77,15 @@ export function PropertyProvider({ children }) {
   };
   return (
     <PropertyContext.Provider
-      value={{ properties, addProperty, updateProperty, deleteProperty }}
+      value={{
+        properties,
+        addProperty,
+        updateProperty,
+        deleteProperty,
+        loading,
+        error,
+        message,
+      }}
     >
       {children}
     </PropertyContext.Provider>
