@@ -27,6 +27,13 @@ export async function POST(request) {
       );
     }
 
+    //check if user is verified
+    if (!user.isVerified) {
+      return NextResponse.json(
+        { error: "Please verify your email!" },
+        { status: 401 },
+      );
+    }
     // Create safe payload (never include password or sensitive fields)
     const payload = {
       id: user._id.toString(),

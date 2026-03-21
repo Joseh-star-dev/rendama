@@ -4,7 +4,7 @@ import Loading from "@/components/Loading";
 import { useAuth } from "@/lib/AuthContext";
 import { Key, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function LoginPage() {
@@ -36,6 +36,10 @@ export default function LoginPage() {
       }, 1200);
     }
   };
+
+  if (error === "Please verify your email!") {
+    return router.push("/verify-email");
+  }
   return (
     <main className="py-30  px-4">
       <Toaster />

@@ -11,6 +11,8 @@ import {
   LogOut,
   Menu,
   User,
+  UserCheck,
+  UserCircle2,
   Users,
   X,
 } from "lucide-react";
@@ -20,6 +22,7 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/AuthContext";
 import Brand from "./Brand";
 import { useProperty } from "@/context/PropetyContext";
+import Link from "next/link";
 
 // ──────────────────────────────────────────────
 export const guestLinks = [
@@ -57,12 +60,36 @@ export default function Navbar() {
   const isActive = (href) => pathname === href;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-xl border-gray-200 max-w-7xl mx-auto">
-      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <Brand />
-
+    <header className="sticky top-0 z-50 w-full border-b backdrop-blur-xl border-gray-200 max-w-7xl mx-auto">
+      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
+        <div className="flex justify-between items-center">
+          <div className="">
+            <Brand />
+          </div>
+          <div className="md:hidden flex gap-5 items-center justify-center">
+            {user ? (
+              <Link
+                href="/dashboard"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-50 px-4 py-3 text-red-700 hover:bg-red-100 font-medium transition"
+              >
+                <UserCheck />
+              </Link>
+            ) : (
+              <a
+                href="/login"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-50 px-4 py-3 text-red-700 hover:bg-red-100 font-medium transition"
+              >
+                <User />
+              </a>
+            )}
+            <button
+              className="md:hidden rounded-lg p-2 text-gray-800  hover:bg-gray-100"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle menu"
+            >
+              {menuOpen ? "" : <Menu size={35} />}
+            </button>
+          </div>
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:items-center md:gap-1 lg:gap-2">
             {!user && !isLoading && (
@@ -157,15 +184,6 @@ export default function Navbar() {
               </button>
             )}
           </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden rounded-lg p-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            {menuOpen ? <X size={28} /> : <Menu size={28} />}
-          </button>
         </div>
       </nav>
 
@@ -182,11 +200,16 @@ export default function Navbar() {
             />
 
             <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="absolute top-0 z-50 min-h-screen w-80 bg-white shadow-2xl md:hidden"
+              // initial={{ x: "-1" }}
+              animate={{ x: -10, x: 0 }}
+              // exit={{ x: "100%" }}
+              transition={{
+                type: "spring",
+                damping: 30,
+                stiffness: 300,
+                duration: 1,
+              }}
+              className="absolute top-0 z-50 left-0 min-h-screen w-80 bg-white shadow-2xl md:hidden"
             >
               <div className="flex h-full flex-col">
                 <div className="flex items-center justify-between border-b px-6 py-5">

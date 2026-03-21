@@ -65,7 +65,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto">
+    <div className="w-full max-w-md mx-auto py-20 px-2">
       <Toaster
         position="top-center"
         toastOptions={{
@@ -78,7 +78,7 @@ export default function RegisterForm() {
         }}
       />
       {error && <p className="text-center text-red-600 mb-5">{error}</p>}
-      <div className="border border-gray-200 p-8 rounded-[2rem] shadow-2xl relative overflow-hidden">
+      <div className="border border-gray-200 p-8 rounded-md shadow-2xl relative overflow-hidden">
         {/* Progress Bar */}
         <div className="absolute top-0 left-0 w-full h-1.5">
           <motion.div
@@ -90,192 +90,187 @@ export default function RegisterForm() {
           />
         </div>
 
-        <AnimatePresence mode="wait">
-          {step === 1 && (
-            <motion.div
-              key="step1"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="space-y-6"
-            >
-              <div>
-                <h2 className="text-2xl font-display font-bold text-gray-950 mb-2">
-                  Get Started
-                </h2>
-                <p className="text-zinc-400 text-sm">
-                  Create your Rendama account to start managing properties.
-                </p>
+        {step === 1 && (
+          <motion.div>
+            <div>
+              <h2 className="text-2xl font-display font-bold text-gray-950 mb-2">
+                Get Started
+              </h2>
+              <p className="text-zinc-400 text-sm">
+                Create your Rendama account to start managing properties.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="input-group">
+                <label className="input-label">Username</label>
+                <div className="relative">
+                  <User
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"
+                    size={18}
+                  />
+                  <input
+                    type="text"
+                    name="username"
+                    placeholder="johndoe"
+                    value={form.username}
+                    onChange={handleChange}
+                    className="input-field pl-12"
+                  />
+                </div>
               </div>
 
-              <div className="space-y-4">
-                <div className="input-group">
-                  <label className="input-label">Username</label>
-                  <div className="relative">
-                    <User
-                      className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"
-                      size={18}
-                    />
-                    <input
-                      type="text"
-                      name="username"
-                      placeholder="johndoe"
-                      value={form.username}
-                      onChange={handleChange}
-                      className="input-field pl-12"
-                    />
-                  </div>
+              <div className="input-group">
+                <label className="input-label">Email Address</label>
+                <div className="relative">
+                  <Mail
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"
+                    size={18}
+                  />
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="john@example.com"
+                    value={form.email}
+                    onChange={handleChange}
+                    className="input-field pl-12"
+                  />
                 </div>
+              </div>
+            </div>
 
-                <div className="input-group">
-                  <label className="input-label">Email Address</label>
-                  <div className="relative">
-                    <Mail
-                      className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"
-                      size={18}
-                    />
-                    <input
-                      type="email"
-                      name="email"
-                      placeholder="john@example.com"
-                      value={form.email}
-                      onChange={handleChange}
-                      className="input-field pl-12"
-                    />
-                  </div>
+            <button
+              onClick={next}
+              className="w-full mt-5 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 group shadow-lg shadow-indigo-600/20"
+            >
+              Continue
+              <ArrowRight
+                size={18}
+                className="group-hover:translate-x-1 transition-transform"
+              />
+            </button>
+          </motion.div>
+        )}
+
+        {step === 2 && (
+          <motion.div
+            key="step2"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="space-y-6"
+          >
+            <button
+              onClick={back}
+              className="flex items-center gap-2 text-zinc-500 hover:text-white transition-colors text-sm font-medium mb-2"
+            >
+              <ArrowLeft size={16} /> Back to details
+            </button>
+
+            <div>
+              <h2 className="text-2xl font-display font-bold text-gray-950 mb-2">
+                Security
+              </h2>
+              <p className="text-zinc-400 text-sm">
+                Protect your account with a strong password.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="input-group">
+                <label className="input-label">Password</label>
+                <div className="relative">
+                  <Key
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"
+                    size={18}
+                  />
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder="••••••••"
+                    value={form.password}
+                    onChange={handleChange}
+                    className="input-field pl-12"
+                  />
+                </div>
+              </div>
+
+              <div className="input-group">
+                <label className="input-label">Confirm Password</label>
+                <div className="relative">
+                  <ShieldCheck
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"
+                    size={18}
+                  />
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    placeholder="••••••••"
+                    value={form.confirmPassword}
+                    onChange={handleChange}
+                    className="input-field pl-12"
+                  />
                 </div>
               </div>
 
               <button
-                onClick={next}
-                className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 group shadow-lg shadow-indigo-600/20"
+                type="submit"
+                disabled={isLoading}
+                className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-600/50 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
               >
-                Continue
-                <ArrowRight
-                  size={18}
-                  className="group-hover:translate-x-1 transition-transform"
-                />
+                {isLoading ? (
+                  <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <>
+                    Create Account <CheckCircle2 size={18} />
+                  </>
+                )}
               </button>
-            </motion.div>
-          )}
+            </form>
+          </motion.div>
+        )}
 
-          {step === 2 && (
-            <motion.div
-              key="step2"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="space-y-6"
+        {step === 3 && (
+          <motion.div
+            key="step3"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center py-8 space-y-6"
+          >
+            <div className="w-20 h-20 bg-gray-100 border border-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="text-emerald-500" size={40} />
+            </div>
+            <div>
+              <h2 className="text-2xl font-display font-bold text-gray-900 mb-2">
+                Check your inbox
+              </h2>
+              <p className="text-zinc-800 text-sm leading-relaxed">
+                We've sent a verification link to{" "}
+                <span className="text-gray-950 font-extrabold">
+                  {form.email}
+                </span>
+                . Please click the link to activate your account.
+              </p>
+            </div>
+            <button
+              onClick={() => redirect("/resend-verification")}
+              className="text-blue-700 hover:text-indigo-300 text-sm font-semibold transition-colors"
             >
-              <button
-                onClick={back}
-                className="flex items-center gap-2 text-zinc-500 hover:text-white transition-colors text-sm font-medium mb-2"
-              >
-                <ArrowLeft size={16} /> Back to details
-              </button>
+              Didn't get the email? Resend
+            </button>
+          </motion.div>
+        )}
 
-              <div>
-                <h2 className="text-2xl font-display font-bold text-gray-950 mb-2">
-                  Security
-                </h2>
-                <p className="text-zinc-400 text-sm">
-                  Protect your account with a strong password.
-                </p>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="input-group">
-                  <label className="input-label">Password</label>
-                  <div className="relative">
-                    <Key
-                      className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"
-                      size={18}
-                    />
-                    <input
-                      type="password"
-                      name="password"
-                      placeholder="••••••••"
-                      value={form.password}
-                      onChange={handleChange}
-                      className="input-field pl-12"
-                    />
-                  </div>
-                </div>
-
-                <div className="input-group">
-                  <label className="input-label">Confirm Password</label>
-                  <div className="relative">
-                    <ShieldCheck
-                      className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"
-                      size={18}
-                    />
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      placeholder="••••••••"
-                      value={form.confirmPassword}
-                      onChange={handleChange}
-                      className="input-field pl-12"
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-600/50 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
-                >
-                  {isLoading ? (
-                    <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  ) : (
-                    <>
-                      Create Account <CheckCircle2 size={18} />
-                    </>
-                  )}
-                </button>
-              </form>
-            </motion.div>
-          )}
-
-          {step === 3 && (
-            <motion.div
-              key="step3"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="text-center py-8 space-y-6"
-            >
-              <div className="w-20 h-20 bg-gray-100 border border-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle2 className="text-emerald-500" size={40} />
-              </div>
-              <div>
-                <h2 className="text-2xl font-display font-bold text-gray-900 mb-2">
-                  Check your inbox
-                </h2>
-                <p className="text-zinc-800 text-sm leading-relaxed">
-                  We've sent a verification link to{" "}
-                  <span className="text-gray-950 font-extrabold">
-                    {form.email}
-                  </span>
-                  . Please click the link to activate your account.
-                </p>
-              </div>
-              <button
-                onClick={() => redirect("/resend-verification")}
-                className="text-blue-700 hover:text-indigo-300 text-sm font-semibold transition-colors"
-              >
-                Didn't get the email? Resend
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <p className="text-center mt-8 text-gray-900 text-sm">
+          Already have an account?{" "}
+          <a
+            href="/login"
+            className="text-blue-600 hover:underline font-medium"
+          >
+            Sign in
+          </a>
+        </p>
       </div>
-
-      <p className="text-center mt-8 text-gray-900 text-sm">
-        Already have an account?{" "}
-        <a href="/login" className="text-blue-600 hover:underline font-medium">
-          Sign in
-        </a>
-      </p>
     </div>
   );
 }

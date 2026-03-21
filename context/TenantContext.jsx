@@ -12,6 +12,7 @@ export function TenantProvider({ children }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const getTenants = async () => {
       try {
         const res = await api.get("/tenants");

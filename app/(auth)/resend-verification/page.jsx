@@ -2,14 +2,16 @@
 import ButtonLoading from "@/components/ButtonLoading";
 import { useAuth } from "@/lib/AuthContext";
 import { Mail } from "lucide-react";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import CheckYourEmail from "../verify-email/page";
 
 export default function resendVerification() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const { resendVerification, error, message, isAuthenticated } = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,9 +21,9 @@ export default function resendVerification() {
     try {
       setLoading(true);
       await resendVerification(email);
-      if (message) {
-        return alert(message);
-      }
+      setTimeout(() => {
+        router.push("/verify-email");
+      }, 1500);
     } catch (error) {
       console.error(error);
     } finally {
@@ -30,12 +32,18 @@ export default function resendVerification() {
       }, 1200);
     }
   };
+
   return (
     <div className="max-w-md mx-auto py-20 px-4">
+      <Toaster />
       {error && <p className="text-red-600 py-3 text-center">{error}</p>}
-      <div className="bg-gray-50 p-8 border border-gray-200 rounded-2xl">
+
+      <div className="bg-gray-100 p-8 border border-gray-200 py-30 rounded-2xl">
+        {message && (
+          <p className="my-5 text-green-600 py-3 text-center">{message}</p>
+        )}
         <form onSubmit={handleSubmit}>
-          <h2 className="mb-10 text-gray-950 font-bold text-center">
+          <h2 className="mb-5 text-gray-600 font-bold text-center">
             Enter your email to resend verification link
           </h2>
           <div className="input-group">
@@ -55,7 +63,7 @@ export default function resendVerification() {
               />
             </div>
             <button className="primary-btn p-2.5 mt-5" type="submit">
-              {loading ? <ButtonLoading /> : "Request Link"}
+              {loading ? <ButtonLoading /> : "Send"}
             </button>
           </div>
         </form>

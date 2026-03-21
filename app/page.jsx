@@ -15,13 +15,6 @@ import { redirect } from "next/navigation";
 export default function page() {
   const { user, isLoading } = useAuth();
 
-  if (isLoading) {
-    <Loading />;
-  }
-
-  if (user) {
-    return redirect("/dashboard");
-  }
   return (
     <main>
       <section>
