@@ -1,8 +1,7 @@
 "use client";
 import AddUnitForm from "@/components/AddUnitForm";
+import Loading from "@/components/Loading";
 import { useUnit } from "@/context/UnitsContext";
-import api from "@/lib/api";
-import Loader from "@/ui/Loader";
 import { MessageCircleWarning } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -13,7 +12,7 @@ export default function Units() {
   const { units, loading, message } = useUnit();
 
   if (loading) {
-    return <Loader />;
+    return <Loading />;
   }
   return (
     <main className="relative">

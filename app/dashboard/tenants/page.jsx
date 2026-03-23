@@ -1,7 +1,7 @@
 "use client";
 import AddTenantForm from "@/components/AddTenantForm";
+import Loading from "@/components/Loading";
 import { useTenant } from "@/context/TenantContext";
-import Loader from "@/ui/Loader";
 import { PlusIcon, User, Users } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -21,7 +21,7 @@ export default function Tenants() {
   if (loading) {
     return (
       <div className="min-h-screen">
-        <Loader />
+        <Loading />
       </div>
     );
   }

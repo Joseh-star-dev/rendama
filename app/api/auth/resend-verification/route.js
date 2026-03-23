@@ -19,7 +19,8 @@ export async function POST(req) {
       // We don't want to leak whether email exists → same message
       return NextResponse.json(
         {
-          error: "If the email exists, a new verification link has been sent.",
+          message:
+            "If the email exists, a new verification link has been sent.",
         },
         { status: 200 },
       );

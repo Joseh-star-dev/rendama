@@ -1,7 +1,6 @@
 "use client";
 import Loading from "@/components/Loading";
 import { useAuth } from "@/lib/AuthContext";
-import Loader from "@/ui/Loader";
 import { redirect } from "next/navigation";
 import React from "react";
 

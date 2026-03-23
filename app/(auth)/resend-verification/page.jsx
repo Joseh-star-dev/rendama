@@ -5,25 +5,23 @@ import { Mail } from "lucide-react";
 import { redirect, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import CheckYourEmail from "../verify-email/page";
+import { EmailSentNote } from "../verify-email/page";
 
 export default function resendVerification() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const { resendVerification, error, message, isAuthenticated } = useAuth();
+  const { resendVerification, error, message, user } = useAuth();
+  const [shoModal, setShowModal] = useState(true);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) {
-      return alert("please enter your email address");
+      return toast.error("please enter your email address");
     }
     try {
       setLoading(true);
       await resendVerification(email);
-      setTimeout(() => {
-        router.push("/verify-email");
-      }, 1500);
     } catch (error) {
       console.error(error);
     } finally {
@@ -33,15 +31,22 @@ export default function resendVerification() {
     }
   };
 
+  if (message && shoModal) {
+    return (
+      <div>
+        <EmailSentNote
+          message={message}
+          closeModal={() => setShowModal(false)}
+        />
+      </div>
+    );
+  }
   return (
-    <div className="max-w-md mx-auto py-20 px-4">
+    <div className="max-w-md mx-auto py-10 px-4">
       <Toaster />
       {error && <p className="text-red-600 py-3 text-center">{error}</p>}
 
       <div className="bg-gray-100 p-8 border border-gray-200 py-30 rounded-2xl">
-        {message && (
-          <p className="my-5 text-green-600 py-3 text-center">{message}</p>
-        )}
         <form onSubmit={handleSubmit}>
           <h2 className="mb-5 text-gray-600 font-bold text-center">
             Enter your email to resend verification link
@@ -62,7 +67,11 @@ export default function resendVerification() {
                 className="input-field pl-12"
               />
             </div>
-            <button className="primary-btn p-2.5 mt-5" type="submit">
+            <button
+              className="primary-btn p-2.5 mt-5"
+              type="submit"
+              disabled={loading}
+            >
               {loading ? <ButtonLoading /> : "Send"}
             </button>
           </div>

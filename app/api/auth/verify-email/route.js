@@ -33,7 +33,7 @@ export async function GET(req) {
 
     const jwt = signToken({ id: user._id.toString(), email: user.email });
 
-    const response = NextResponse.redirect(new URL("/dashboard", req.url));
+    const response = NextResponse.json({ message: "Email verified" });
     response.cookies.set("auth-token", jwt, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

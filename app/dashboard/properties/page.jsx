@@ -7,8 +7,8 @@ import AddPropertyForm from "@/components/AddPropertyForm";
 import toast, { Toaster } from "react-hot-toast";
 import PropertyCard from "@/components/PropertyCard";
 import { useProperty } from "@/context/PropetyContext";
-import Loader from "@/ui/Loader";
 import Error from "@/components/Error";
+import Loading from "@/components/Loading";
 
 export default function MyProperty() {
   const [showPropertyForm, setShowPropertyForm] = useState(false);
@@ -19,7 +19,7 @@ export default function MyProperty() {
   if (loading) {
     return (
       <div className="min-h-[60] flex items-center justify-center">
-        <Loader />
+        <Loading />
       </div>
     );
   }
