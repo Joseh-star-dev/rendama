@@ -62,31 +62,30 @@ export const EmailSentNote = ({ message, closeModal }) => {
     </div>
   );
 };
-export default function VerifyEmail() {
+
+function VerifyContent() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const { user, isLoading } = useAuth();
   const router = useRouter();
-
-  function TokenHandler() {
-    const storedToken = useSearchParams();
-    const token = storedToken.get("token");
-
-    return token;
-  }
-
-  if (user) {
-    return router.push("/dashboard");
-  }
+  const storedToken = useSearchParams();
+  const token = storedToken.get("token");
 
   useEffect(() => {
-    setLoading(true);
+    if (user?.isVerified) {
+      router.push("/dashboard");
+      return;
+    }
     if (token) {
+      setLoading(true);
       const verify = async () => {
         try {
           const res = await api.get(`/auth/verify-email?token=${token}`);
           setMessage(res.data.message);
+          setTimeout(() => {
+            router.push("/dashboard");
+          }, 1200);
         } catch (error) {
           setError(
             error.response?.data?.error || "Something happened. Try again!",
@@ -95,17 +94,17 @@ export default function VerifyEmail() {
         } finally {
           setTimeout(() => {
             setLoading(false);
-          }, 2000);
+          }, 1000);
         }
       };
       verify();
     }
-  }, []);
+  }, [token, user, router]);
 
   if (loading) {
     return <Loading />;
   }
-  if (error && !loading) {
+  if ((!token && !loading) || error) {
     return (
       <Suspense fullback={<Loading />}>
         <TokenError error={error} token={token} />
@@ -113,13 +112,29 @@ export default function VerifyEmail() {
     );
   }
 
+  if (message) {
+    return <VerificationSuccess message={message} />;
+  } else {
+    return <EmailSentNote message={message} />;
+  }
+}
+
+const VerificationSuccess = ({ message }) => {
+  return (
+    <div className="fixes mih-h-screen bg-black/30 insert-0 w-full flex flex-col items-center">
+      <div className="bg-white mx-auto shadow rounded-md">
+        <div className="flex justify-center">
+          <CircleCheckIcon size={50} className="text-green-600 mb-5" />
+        </div>
+        <h1 className="text-sm font-semibold text-center">{message}</h1>
+      </div>
+    </div>
+  );
+};
+export default function VerifyEmail() {
   return (
     <Suspense fallback={<Loading />}>
-      {!error && !loading && !isLoading && (
-        <div>
-          <EmailSentNote />
-        </div>
-      )}
+      <VerifyContent />
     </Suspense>
   );
 }
