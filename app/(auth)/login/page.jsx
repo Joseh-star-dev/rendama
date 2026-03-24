@@ -19,6 +19,12 @@ export default function LoginPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  useEffect(() => {
+    if (user) {
+      router.push("/dashboard");
+    }
+  }, [user]);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -27,7 +33,6 @@ export default function LoginPage() {
       if (message) {
         toast.success(message);
       }
-      router.push("/dashboard");
     } catch (err) {
       console.error(err);
     } finally {

@@ -21,11 +21,11 @@ export function UnitProvider({ children }) {
         setLoading(true);
         const res = await api.get("/units");
         setUnits(res.data);
+        setLoading(false);
       } catch (err) {
-        setUnits(null);
+        setUnits([]);
         console.error(err);
         setError(err.response?.data?.error);
-      } finally {
         setLoading(false);
       }
     };
@@ -94,7 +94,15 @@ export function UnitProvider({ children }) {
 
   return (
     <UnitsContext.Provider
-      value={{ units, addUnit, deleteUnit, updateUnit, error, message }}
+      value={{
+        units,
+        addUnit,
+        deleteUnit,
+        updateUnit,
+        error,
+        message,
+        loading,
+      }}
     >
       {children}
     </UnitsContext.Provider>

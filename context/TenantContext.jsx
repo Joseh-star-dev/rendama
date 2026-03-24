@@ -17,11 +17,11 @@ export function TenantProvider({ children }) {
       try {
         const res = await api.get("/tenants");
         setTenants(res.data);
+        setLoading(false);
       } catch (err) {
         console.error(err);
         setError(err.response?.data?.error || "Something happened!");
-        setTenants(null);
-      } finally {
+        setTenants([]);
         setLoading(false);
       }
     };
@@ -66,7 +66,9 @@ export function TenantProvider({ children }) {
   };
 
   return (
-    <TenantContext.Provider value={{ tenants, addTenant, message, error }}>
+    <TenantContext.Provider
+      value={{ tenants, addTenant, message, error, loading }}
+    >
       {children}
     </TenantContext.Provider>
   );

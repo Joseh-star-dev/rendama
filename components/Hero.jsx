@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 
 export default function Hero() {
   return (
-    <section className="relative pt-20 pb-32 px-6 overflow-hidden">
+    <section className="relative pt-10 pb-32 px-2 overflow-hidden">
       {/* Background Glows */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-500/10 blur-[120px] rounded-full" />
@@ -39,7 +39,7 @@ export default function Hero() {
             focus on growing your portfolio.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center gap-4">
+          <div className="flex flex-col sm:flex-row  gap-4">
             <button
               className="group px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-bold text-lg transition-all flex items-center gap-2 shadow-xl shadow-indigo-600/20"
               onClick={() => redirect("/register")}

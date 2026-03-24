@@ -9,7 +9,7 @@ import React, { Suspense, useEffect, useState } from "react";
 
 const TokenError = ({ error, token }) => {
   return (
-    <div className="min-h-screen bg-black/10 fixed inset-0 flex justify-center items-center">
+    <div className="min-h-screen bg-black/10 fixed inset-0 flex justify-center py-20 px-4">
       <div className="p-8 bg-white shadow rounded-md flex flex-col gap-4">
         <h1 className="text-red-500 font-bold text-center text-lg font-serif">
           {error}
@@ -83,9 +83,7 @@ function VerifyContent() {
         try {
           const res = await api.get(`/auth/verify-email?token=${token}`);
           setMessage(res.data.message);
-          setTimeout(() => {
-            router.push("/dashboard");
-          }, 1200);
+          setTimeout(() => router.push("/login"), 1500);
         } catch (error) {
           setError(
             error.response?.data?.error || "Something happened. Try again!",
@@ -94,7 +92,7 @@ function VerifyContent() {
         } finally {
           setTimeout(() => {
             setLoading(false);
-          }, 1000);
+          }, 2000);
         }
       };
       verify();
@@ -104,7 +102,7 @@ function VerifyContent() {
   if (loading) {
     return <Loading />;
   }
-  if ((!token && !loading) || error) {
+  if (!token && !loading && !user) {
     return (
       <Suspense fullback={<Loading />}>
         <TokenError error={error} token={token} />
@@ -121,8 +119,8 @@ function VerifyContent() {
 
 const VerificationSuccess = ({ message }) => {
   return (
-    <div className="fixes mih-h-screen bg-black/30 insert-0 w-full flex flex-col items-center">
-      <div className="bg-white mx-auto shadow rounded-md">
+    <div className="fixed mih-h-screen bg-black/30 insert-0 w-full flex flex-col items-center py-20">
+      <div className="bg-white mx-auto shadow rounded-md px-15 py-20">
         <div className="flex justify-center">
           <CircleCheckIcon size={50} className="text-green-600 mb-5" />
         </div>
