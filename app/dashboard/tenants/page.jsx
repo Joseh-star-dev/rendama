@@ -18,6 +18,7 @@ export default function Tenants() {
       setShowForm(true);
     }
   }, [unitNumber]);
+
   if (loading) {
     return (
       <div className="min-h-screen">
