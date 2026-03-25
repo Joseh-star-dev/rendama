@@ -1,5 +1,5 @@
 "use client";
-import { useProperty } from "@/context/PropetyContext";
+import { useProperty } from "@/context/PropertyContext";
 import { useTenant } from "@/context/TenantContext";
 import { useUnit } from "@/context/UnitsContext";
 import { X } from "lucide-react";

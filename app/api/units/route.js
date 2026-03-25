@@ -34,6 +34,7 @@ export async function GET(req) {
     const units = await Unit.find({ owner: user._id }).populate(
       "property owner",
     );
+
     if (!units || units.length === 0) {
       return NextResponse.json({
         message: "Your have not registered any property",

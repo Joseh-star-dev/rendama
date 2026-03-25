@@ -1,5 +1,5 @@
 "use client";
-import { useProperty } from "@/context/PropetyContext";
+import { useProperty } from "@/context/PropertyContext";
 import { Building2Icon, CheckLineIcon, Map, MapIcon, X } from "lucide-react";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";

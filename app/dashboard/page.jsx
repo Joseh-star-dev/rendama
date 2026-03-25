@@ -5,8 +5,14 @@ import Link from "next/link";
 import Loading from "@/components/Loading";
 import { useAuth } from "@/lib/AuthContext";
 import { userLinks } from "@/components/Navbar"; // assuming this exports an array like:
-import { useProperty } from "@/context/PropetyContext";
-import { BuildingIcon, House, HouseIcon } from "lucide-react";
+import { useProperty } from "@/context/PropertyContext";
+import {
+  BuildingIcon,
+  HomeIcon,
+  House,
+  HouseIcon,
+  Users2Icon,
+} from "lucide-react";
 import { useTenant } from "@/context/TenantContext";
 import { useUnit } from "@/context/UnitsContext";
 // [{ name: "Properties", href: "/dashboard/properties", icon: <BuildingIcon />, count?: number }, ...]
@@ -28,11 +34,32 @@ export default function DashboardPage() {
   if (isLoading) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center">
-        <Loading />
+        <Loading content={"Loading user..."} />
       </div>
     );
   }
 
+  const starts = [
+    { name: "Overview", href: "/dashboard", icon: <HomeIcon />, total: "" },
+    {
+      name: "Properties",
+      href: "/dashboard/properties",
+      icon: <BuildingIcon />,
+      total: properties.length ?? 0,
+    },
+    {
+      name: "Units",
+      href: "/dashboard/units",
+      icon: <HomeIcon />,
+      total: units.length ?? 0,
+    },
+    {
+      name: "Tenants",
+      href: "/dashboard/tenants",
+      icon: <Users2Icon />,
+      total: tenants.length ?? 0,
+    },
+  ];
   // Render nothing while redirect is happening
   if (!user) {
     return null;
@@ -40,7 +67,7 @@ export default function DashboardPage() {
 
   return (
     <Suspense fallback={<Loading />}>
-      <main className="min-h-screen bg-gray-50/40 py-6 md:py-10">
+      <main className="min-h-screen bg-gray-50/40 py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
             <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
@@ -51,59 +78,28 @@ export default function DashboardPage() {
               Manage your properties and listings from here
             </p>
           </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-            <Link
-              href="/dashboard/properties"
-              className="hover:border-indigo-500 border border-white flex justify-center items-center flex-col gap-2 p-2 md:p-4 bg-gray-100 shadow rounded-md"
-            >
-              <div className="flex items-center gap-2">
-                <span className="font-semibold">Total property</span>
-                <BuildingIcon size={20} className="text-blue-600" />
-              </div>
-              <p className="font-extrabold text-3xl text-indigo-600">
-                {properties.length ?? 0}
-              </p>
-            </Link>
-
-            <Link
-              href="/dashboard/units"
-              className="hover:border-indigo-500 border border-white flex justify-center items-center flex-col gap-2 p-2 md:p-4 bg-gray-100 shadow rounded-md"
-            >
-              <div className="flex items-center gap-2">
-                <span className="font-semibold">Total Units</span>
-                <HouseIcon size={20} className="text-blue-600" />
-              </div>
-              <p className="font-extrabold text-3xl text-indigo-600">
-                {units.length ?? 0}
-              </p>
-            </Link>
-
-            <Link
-              href="/dashboard/tenants"
-              className="hover:border-indigo-500 border border-white flex justify-center items-center flex-col gap-2 p-2 md:p-4 bg-gray-100 shadow rounded-md"
-            >
-              <div className="flex items-center gap-2">
-                <span className="font-semibold">Total Tenants</span>
-                <BuildingIcon size={20} className="text-blue-600" />
-              </div>
-              <p className="font-extrabold text-3xl text-indigo-600">
-                {tenants.length ?? 0}
-              </p>
-            </Link>
-
-            <Link
-              href="/dashboard/payments"
-              className="hover:border-indigo-500 border border-white flex justify-center items-center flex-col gap-2 p-2 md:p-4 bg-gray-100 shadow rounded-md"
-            >
-              <div className="flex items-center gap-2">
-                <span className="font-semibold">Total Paid</span>
-                <BuildingIcon size={20} className="text-blue-600" />
-              </div>
-              <p className="font-extrabold text-3xl text-indigo-600">{0}</p>
-            </Link>
-          </div>
-
+          {starts && (
+            <div className="grid grid-cols-3 gap-3 md:grid-cols-4">
+              {starts.map((start) => (
+                <Link
+                  key={start.name}
+                  href={start.href}
+                  className="text-xs md:text-lg p-4 border border-gray-200 rounded-md flex flex-col items-center transition hover:border-blue-200"
+                >
+                  <span className="text-blue-600 font-extrabold mb-3">
+                    {start.icon}
+                  </span>
+                  <span>{start.name}</span>
+                  <p className="text-gray-900 font-bold flex gap-4 items-center">
+                    Total:{" "}
+                    <span className="font-extrabold text-xl">
+                      {start.total}
+                    </span>
+                  </p>
+                </Link>
+              ))}
+            </div>
+          )}
           {/* Optional: quick stats or call-to-action row */}
           {userLinks.length === 0 && (
             <div className="mt-12 text-center text-gray-500">

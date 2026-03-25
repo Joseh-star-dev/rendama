@@ -6,7 +6,7 @@ import api from "@/lib/api";
 import AddPropertyForm from "@/components/AddPropertyForm";
 import toast, { Toaster } from "react-hot-toast";
 import PropertyCard from "@/components/PropertyCard";
-import { useProperty } from "@/context/PropetyContext";
+import { useProperty } from "@/context/PropertyContext";
 import Error from "@/components/Error";
 import Loading from "@/components/Loading";
 
@@ -19,7 +19,7 @@ export default function MyProperty() {
   if (loading) {
     return (
       <div className="min-h-[60] flex items-center justify-center">
-        <Loading />
+        <Loading content={"Loading property..."} />
       </div>
     );
   }
@@ -74,6 +74,7 @@ export default function MyProperty() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             {properties.map((property) => (
               <PropertyCard
+                id={property._id}
                 key={property._id}
                 name={property.name}
                 location={property.location}

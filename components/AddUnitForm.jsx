@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import ButtonLoading from "./ButtonLoading";
 import { useUnit } from "@/context/UnitsContext";
-import { useProperty } from "@/context/PropetyContext";
+import { useProperty } from "@/context/PropertyContext";
 import { useTenant } from "@/context/TenantContext";
 import AddTenantForm from "./AddTenantForm";
 

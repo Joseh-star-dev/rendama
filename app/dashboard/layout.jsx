@@ -23,7 +23,7 @@ export default function DashboardLayout({ children }) {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loading />
+        <Loading content={"Loading user..."} />
       </div>
     );
   }

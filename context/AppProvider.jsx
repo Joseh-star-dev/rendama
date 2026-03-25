@@ -1,6 +1,6 @@
 import { AuthProvider } from "@/lib/AuthContext";
 import React from "react";
-import { PropertyProvider } from "./PropetyContext";
+import { PropertyProvider } from "./PropertyContext";
 import { UnitProvider } from "./UnitsContext";
 import { TenantProvider } from "./TenantContext";
 

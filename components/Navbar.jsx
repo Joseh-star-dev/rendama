@@ -21,7 +21,6 @@ import { Suspense, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/AuthContext";
 import Brand from "./Brand";
-import { useProperty } from "@/context/PropetyContext";
 import Link from "next/link";
 import Loading from "./Loading";
 
@@ -62,7 +61,7 @@ export default function Navbar() {
   const links = user ? userLinks : guestLinks;
 
   return (
-    <Suspense fullback={links}>
+    <Suspense>
       <header className="sticky top-0 z-50 w-full border-b backdrop-blur-xl border-gray-200 max-w-7xl mx-auto bg-gray-100">
         <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
@@ -73,7 +72,7 @@ export default function Navbar() {
               {user ? (
                 <Link
                   href="/dashboard"
-                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-50 px-4 py-3 text-red-700 hover:bg-red-100 font-medium transition"
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-3 text-white hover:bg-red-100 font-medium transition"
                 >
                   <UserCheck />
                 </Link>

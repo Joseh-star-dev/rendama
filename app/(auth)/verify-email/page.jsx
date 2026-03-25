@@ -2,15 +2,15 @@
 import Loading from "@/components/Loading";
 import api from "@/lib/api";
 import { useAuth } from "@/lib/AuthContext";
-import { CircleCheckIcon } from "lucide-react";
+import { ArrowBigRight, ArrowRight, CircleCheckIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
 
 const TokenError = ({ error, token }) => {
   return (
-    <div className="min-h-screen bg-black/10 fixed inset-0 flex justify-center py-20 px-4">
-      <div className="p-8 bg-white shadow rounded-md flex flex-col gap-4">
+    <div className="min-h-screen bg-black/10 fixed inset-0 py-20 px-4">
+      <div className="p-8 bg-white shadow rounded-md flex flex-col gap-4 mx-w-md mx-auto w-86">
         <h1 className="text-red-500 font-bold text-center text-lg font-serif">
           {error}
         </h1>
@@ -83,7 +83,6 @@ function VerifyContent() {
         try {
           const res = await api.get(`/auth/verify-email?token=${token}`);
           setMessage(res.data.message);
-          setTimeout(() => router.push("/login"), 1500);
         } catch (error) {
           setError(
             error.response?.data?.error || "Something happened. Try again!",
@@ -102,7 +101,7 @@ function VerifyContent() {
   if (loading) {
     return <Loading />;
   }
-  if (!token && !loading && !user) {
+  if (error) {
     return (
       <Suspense fullback={<Loading />}>
         <TokenError error={error} token={token} />
@@ -112,19 +111,30 @@ function VerifyContent() {
 
   if (message) {
     return <VerificationSuccess message={message} />;
-  } else {
-    return <EmailSentNote message={message} />;
   }
 }
 
 const VerificationSuccess = ({ message }) => {
   return (
-    <div className="fixed mih-h-screen bg-black/30 insert-0 w-full flex flex-col items-center py-20">
-      <div className="bg-white mx-auto shadow rounded-md px-15 py-20">
+    <div className="fixed h-screen bg-black/10 insert-0 w-full flex flex-col items-center py-20">
+      <div className="bg-white mx-auto shadow rounded-md p-10">
         <div className="flex justify-center">
-          <CircleCheckIcon size={50} className="text-green-600 mb-5" />
+          <CircleCheckIcon size={50} className="text-green-600 mb-2" />
         </div>
-        <h1 className="text-sm font-semibold text-center">{message}</h1>
+        <h1 className="text-sm font-semibold text-gray-700 mb-3 text-center">
+          {message}
+        </h1>
+        <div>
+          <p className="text-gray-950 font-semibold">
+            Click the link below to login to your account
+          </p>
+          <Link
+            href="/login"
+            className="flex py-3 px-6 bg-blue-600 mt-3 rounded-md text-white font-bold gap-3 justify-center items-center"
+          >
+            <span>Login</span> <ArrowRight size={20} />
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -1,3 +1,5 @@
+"use client";
+import Link from "next/link";
 import React from "react";
 
 export default function PropertyCard({
@@ -13,11 +15,13 @@ export default function PropertyCard({
 }) {
   const date = new Date(createdAt);
   return (
-    <div className="p-6 bg-gray-100 space-y-2">
+    <Link
+      href={`/dashboard/properties/${id}`}
+      className="p-6 bg-gray-100 space-y-2"
+    >
       <div className="space-y-2">
         <h1 className="font-bold text-gray-950 text-xl mb-3 flex flex-col text-center gap-2">
-          <span className="text-sm text-gray-500">Property name: </span>
-          <span className="p-1.5 bg-gray-900 text-white font-bold rounded-md">
+          <span className="p-1.5 bg-blue-700 text-white font-bold rounded-md">
             {name}
           </span>
         </h1>
@@ -33,23 +37,10 @@ export default function PropertyCard({
           <span className="text-gray-600">Total Units: </span>
           {totalUnits} units
         </p>
-      </div>
-      <div className="mt-2 text-gray-600 space-y-2">
-        <p>
-          <span>Created at: </span>
-          {createdAt}
-        </p>
-        <p>
-          <span>Last Update: </span>
-          {updatedAt}
-        </p>
-      </div>
-      <div className="flex gap-2 mt-4">
-        <button className="primary-btn py-2">Update</button>
-        <button className="primary-btn py-1 bg-red-500 hover:bg-red-700">
-          Delete
+        <button className="primary-btn bg-transparent text-blue-800 font-bold border">
+          View more
         </button>
       </div>
-    </div>
+    </Link>
   );
 }
