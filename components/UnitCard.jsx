@@ -14,31 +14,29 @@ export default function UnitCard({
   return (
     <Link
       href={`/dashboard/units/${id}`}
-      className="p-6  border border-gray-200 rounded-md"
+      className="px-6 py-4 bg-gray-200 shadow-md border-gray-100 border hover:bg-gray-200 transition"
     >
       <div className="space-y-3">
-        <h1 className="px-4 py-2 text-center font-extrabold  bg-blue-600">
-          Unit Number: <span className="text-white">{unitNumber}</span>
+        <h1 className="px-4 py-2 text-center border-b border-gray-700">
+          Unit Number:{" "}
+          <span className="text-gray-950 font-extrabold">{unitNumber}</span>
         </h1>
-        <div className="text-gray-700 font-semibold">
-          <p>
-            Property Name: <span>{propertyName}</span>
+        <div className="text-gray-700 text-sm">
+          <p className="font-semibold">
+            Property Name: <span className="font-normal">{propertyName}</span>
           </p>
-          <p>
-            Tenant Name:{" "}
-            <span
-              className={`${!tenant ? "text-red-600" : "hover:text-blue-600"}`}
-            >
-              {tenant}
-            </span>
+          <p className="font-semibold">
+            Tenant Name: <span className="font-normal">{tenant}</span>
           </p>
-          <p>
-            Rent Amount: <span>{rent}</span>
+          <p className="font-semibold">
+            Rent Amount: <span className="font-normal">{rent}</span>
           </p>
-          <p>
-            Due Day: <span>{dueDay}</span>
+          <p className="font-semibold">
+            Due Day: <span className="font-normal">{dueDay}</span>
           </p>
-          <p>status: {status}</p>
+          <p className="font-semibold">
+            status: <span className="font-normal">{status}</span>
+          </p>
         </div>
         <button className="text-lg font-bold text-blue-600 text-center w-full p-2 bg-gray-200 rounded-md">
           View more

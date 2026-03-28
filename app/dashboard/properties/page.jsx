@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Building2Icon, BuildingIcon } from "lucide-react";
+import { Building2Icon, BuildingIcon, Plus } from "lucide-react";
 import api from "@/lib/api";
 import AddPropertyForm from "@/components/AddPropertyForm";
 import toast, { Toaster } from "react-hot-toast";
@@ -34,16 +34,18 @@ export default function MyProperty() {
     <main className="flex flex-col w-full min-h-screen relative pb-12">
       <Toaster position="top-right" />
 
-      <div className="p-4 md:px-10 md:py-8 space-y-6 max-w-7xl mx-auto w-full">
+      <div className="md:px-10 md:py-8 space-y-6 max-w-7xl mx-auto w-full">
         <h1 className="font-bold text-2xl md:text-3xl">
           {message || "Manage Your Properties"}
         </h1>
 
-        <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
-          <div className="flex-1 max-w-xs bg-green-700 text-white px-6 py-4 rounded-xl shadow flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <BuildingIcon size={28} />
-              <span className="text-lg font-medium">Total Properties</span>
+        <div className="flex flex-row gap-4 md:gap-6">
+          <div className="flex-1 max-w-xs px-4 pt-4 pb-1 rounded-md border border-gray-400 shadow flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <BuildingIcon size={28} className="text-blue-600" />
+              <span className="text-gray-700 text-xs md:text-sm">
+                Total Properties
+              </span>
             </div>
             <span className="text-2xl font-bold">
               {properties?.length ?? 0}
@@ -52,10 +54,10 @@ export default function MyProperty() {
 
           <button
             onClick={() => setShowPropertyForm(true)}
-            className="flex-1 max-w-xs bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-xl shadow flex items-center justify-center gap-3 text-lg font-medium transition-colors"
+            className="text-xs flex-1 max-w-xs bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-4 rounded-xl shadow flex items-center justify-center gap-3 md:text-lg font-medium transition-colors"
           >
-            Add New Property
-            <Building2Icon size={24} />
+            <Plus size={24} />
+            New Property
           </button>
         </div>
 

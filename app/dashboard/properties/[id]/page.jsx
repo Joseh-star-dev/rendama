@@ -1,6 +1,5 @@
 "use client";
 import Loading from "@/components/Loading";
-import PropertyCard from "@/components/PropertyCard";
 import { useProperty } from "@/context/PropertyContext";
 import api from "@/lib/api";
 import { ChevronDown, ChevronUp, House } from "lucide-react";
@@ -51,7 +50,7 @@ export default function PropertyDetail() {
     }
 
     return (
-      <div className="space-y-2 p-4 shadow-md">
+      <div className="space-y-2 p-4 shadow-md font-serif">
         <div className="flex justify-center flex-col items-center bg-blue-700 py-2 rounded-md">
           <House size={40} className="text-white mb-3" />
           <h1>
@@ -59,32 +58,32 @@ export default function PropertyDetail() {
           </h1>
         </div>
 
-        <div className="text-gray-900 font-bold">
+        <div className="text-gray-900 font-bold text-sm space-y-1 ">
           <p>
             Total Units:{" "}
-            <span className="text-gray-700 font-bold">
+            <span className="text-gray-600 font-bold">
               {property.totalUnits} units
             </span>
           </p>
           <p>
             Location:{" "}
-            <span className="text-gray-700 font-bold">{property.location}</span>
+            <span className="text-gray-600 font-bold">{property.location}</span>
           </p>
           <p>
             Description:{" "}
-            <span className="text-gray-700 font-bold">
+            <span className="text-gray-600 font-bold">
               {property.description}
             </span>
           </p>
           <p>
             Created On:{" "}
-            <span className="text-gray-700 font-bold">
+            <span className="text-gray-600 font-bold">
               {new Date(property.createdAt).toDateString()}
             </span>
           </p>
           <p>
             Last Update:{" "}
-            <span className="text-gray-700 font-bold">
+            <span className="text-gray-600 font-bold">
               {new Date(property.updatedAt).toDateString()}
             </span>
           </p>
@@ -107,14 +106,40 @@ export default function PropertyDetail() {
       return <Loading />;
     }
     return (
-      <div className="py-6 mt-5 flex flex-col gap-4 max-w-md">
-        <div className="">
-          <h1 className="font-bold mb-2 flex justify-around gap-2 px-3 py-2 bg-gray-200 rounded-md">
-            Total registered Units
+      <div className="py-6 mt-5 flex flex-col space-y-4">
+        <div className="flex gap-4 text-sm font-serif">
+          <div className="py-2 px-3 flex flex-col items-center border border-gray-300">
+            <p className="">Expected Rent</p>
+            <span className="font-extrabold text-blue-600 mt-2 text-sm">
+              Ksh. {0}
+            </span>
+          </div>
+          <div className="py-2 px-3 flex flex-col items-center border border-gray-300">
+            <p>Collected Rent</p>
+            <span className="font-extrabold text-blue-600 mt-2 text-sm">
+              Ksh. {0}
+            </span>
+          </div>
+          <div className="py-2 px-3 flex flex-col items-center border border-gray-300">
+            <p>Pending Rent</p>
+            <span className="font-extrabold text-blue-600 mt-2 text-sm">
+              Ksh. {0}
+            </span>
+          </div>
+        </div>
+        <div className="py-2 flex items-center gap-4 px-4 border border-gray-200 max-w-md">
+          <h1 className="text-sm">Unregistered Units</h1>
+          <span className="text-blue-700 font-extrabold">
+            {unregisteredUnits() ?? 0}
+          </span>
+        </div>
+        <div className="max-w-md">
+          <h1 className="py-2 px-4s flex gap-5 border px-4 border-gray-200 relative">
+            Registered Units
             <span className="text-blue-700 font-extrabold">
               {registeredUnits.length ?? 0}
             </span>
-            <p>
+            <p className="absolute right-5">
               {showDropdown ? (
                 <ChevronUp onClick={() => setShowDropdown(false)} />
               ) : (
@@ -129,11 +154,12 @@ export default function PropertyDetail() {
                   <Link
                     href={`/dashboard/units/${unit._id}`}
                     key={unit._id}
-                    className="p-2 shadow-md border border-gray-200"
+                    className="p-4 shadow-md bg-gray-100 text-sm font-serif"
                   >
-                    <h1 className="font-extrabold text-gray-950 mb-2">
+                    <h1 className="text-gray-700 font-semibold flex items-center gap-2 justify-start mb-2 border-b border-gray-200 p-2">
+                      <House size={20} className="text-blue-600" />
                       Unit Name:{" "}
-                      <span className="text-blue-600">{unit.unitNumber}</span>
+                      <span className="text-gray-950">{unit.unitNumber}</span>
                     </h1>
                     <p className="font-semibold text-gray-600">
                       Tenant:{" "}
@@ -145,25 +171,23 @@ export default function PropertyDetail() {
                       Status:{" "}
                       <span className="text-green-600">{unit.status}</span>
                     </p>
+                    <p className="text-gray-600 font-semibold">
+                      Rent: <span className="text-green-600">{unit.rent}</span>
+                    </p>
+                    <button className="primary-btn mt-5 rounded-none">
+                      View Unit
+                    </button>
                   </Link>
                 ))}
             </div>
           )}
-        </div>
-        <div className="border flex items-center justify-center gap-4 rounded-md max-w-86 p-3 border-gray-200">
-          <h1 className="font-bold text-sms md:text-xl">
-            Total Unregistered Units
-          </h1>
-          <span className="text-blue-700 font-extrabold text-xl">
-            {unregisteredUnits() ?? 0}
-          </span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl">
+    <div className="max-w-7xl font-serif">
       <div className="mx-auto">
         <Suspense fallback={<loading />}>
           <PropertyIdInfo />

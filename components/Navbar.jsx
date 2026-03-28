@@ -3,6 +3,7 @@
 import {
   Bell,
   Building,
+  CircleUser,
   CreditCard,
   HelpCircle,
   Home,
@@ -22,7 +23,6 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/AuthContext";
 import Brand from "./Brand";
 import Link from "next/link";
-import Loading from "./Loading";
 
 // ──────────────────────────────────────────────
 export const guestLinks = [
@@ -68,20 +68,20 @@ export default function Navbar() {
             <div className="">
               <Brand />
             </div>
-            <div className="md:hidden flex gap-5 items-center justify-center">
+            <div className="md:hidden flex items-center justify-center">
               {user ? (
                 <Link
                   href="/dashboard"
-                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-3 text-white hover:bg-red-100 font-medium transition"
+                  className="flex w-full items-center justify-center px-3 font-medium transition"
                 >
-                  <UserCheck />
+                  <CircleUser size={35} className="text-blue-600" />
                 </Link>
               ) : (
                 <a
                   href="/login"
                   className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-800 px-3 py-2 text-white hover:bg-red-100 font-medium transition"
                 >
-                  <User />
+                  <CircleUser />
                 </a>
               )}
               <button

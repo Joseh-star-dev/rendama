@@ -109,9 +109,21 @@ export async function POST(req) {
       );
     }
 
+    const unit_exist = await Unit.findOne({
+      unitNumber,
+      property,
+      owner: user._id,
+    });
+
+    if (!unit_exist) {
+      return NextResponse.json({ error: "Unit not found" }, { status: 404 });
+    }
+
+    const rentAmount = unit_exist.rent;
+
     const existingTenant = await Tenant.findOne({
       unitNumber: unitNumber,
-      property: property.name,
+      property: property._id,
     });
     if (existingTenant) {
       return NextResponse.json(
@@ -127,15 +139,16 @@ export async function POST(req) {
       name,
       phone,
       unitNumber,
+      rentAmount,
       property: property._id,
       moveInDate,
     });
 
     //update unit
-    const unit = await Unit.findOneAndUpdate(
-      { unitNumber, property: property._id },
-      { status: "occupied" },
-    );
+    unit_exist.status = "occupied";
+    unit_exist.tenant = tenant._id;
+
+    await unit_exist.save();
 
     return NextResponse.json(
       { success: true, message: "Tenant added" },

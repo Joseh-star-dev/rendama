@@ -3,7 +3,7 @@ import AddUnitForm from "@/components/AddUnitForm";
 import Loading from "@/components/Loading";
 import UnitCard from "@/components/UnitCard";
 import { useUnit } from "@/context/UnitsContext";
-import { MessageCircleWarning } from "lucide-react";
+import { House, MessageCircleWarning } from "lucide-react";
 import Link from "next/link";
 import React, { Suspense, useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -17,22 +17,25 @@ export default function Units() {
   }
   return (
     <Suspense fullback={<Loading />}>
-      <main className="relative">
-        <div className="max-w-7xl mx-auto">
-          <div className="space-y-5">
+      <main className="relative font-serif">
+        <div className="max-w-7xl mx-auto py-4 shadow">
+          <div className="space-y-5 px-3 py-3">
             <h3 className="text-2xl font-bold ">
               Manage your Units. <br />
               <span className="text-sm">
                 Add tenants, update and delete units.
               </span>
             </h3>
-            <div className="flex flex-col md:flex-row gap-5 max-w-lg">
-              <div className="primary-btn bg-green-700 flex justify-between px-4 text-xl font-bold">
-                <span>total units</span> <span>{units.length ?? 0}</span>
+            <div className="flex gap-4 max-w-lg justify-between md:justify-start">
+              <div className="py-2 px-8 flex justify-between text-sm gap-5 border-2 rounded-md border-blue-600">
+                <span>total units</span>{" "}
+                <span className="font-extrabold text-blue-600">
+                  {units.length ?? 0}
+                </span>
               </div>
               <button
                 onClick={() => setShowUnitsForm(true)}
-                className="primary-btn text-xl font-bold"
+                className="py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-md px-8 flex border border-gray-300"
               >
                 Add new unit
               </button>
@@ -47,7 +50,7 @@ export default function Units() {
                 id={unit._id}
                 unitNumber={unit.unitNumber}
                 propertyName={unit.property.name}
-                tenant={unit.tenant ?? "No tenant !"}
+                tenant={unit.tenant?.name ?? "No tenant !"}
                 rent={unit.rent}
                 dueDay={unit.dueDay}
                 status={unit.status}

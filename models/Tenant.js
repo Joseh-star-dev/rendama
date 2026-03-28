@@ -15,7 +15,11 @@ const tenantSchema = new mongoose.Schema(
     },
     moveInDate: Date,
     rentStatus: { type: String, enum: ["paid", "pending"], default: "pending" },
+    rentAmount: Number,
+    rentDueDate: Date,
+    lastNotified: Date,
   },
+
   { timestamps: true },
 );
 

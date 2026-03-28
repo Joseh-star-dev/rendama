@@ -5,42 +5,39 @@ import Link from "next/link";
 import Loading from "@/components/Loading";
 import { useAuth } from "@/lib/AuthContext";
 import { userLinks } from "@/components/Navbar"; // assuming this exports an array like:
-import { useProperty } from "@/context/PropertyContext";
 import {
+  BanknoteArrowDown,
+  BanknoteX,
   BuildingIcon,
+  CircleCheck,
+  CoinsIcon,
+  CreditCardIcon,
   HomeIcon,
-  House,
-  HouseIcon,
+  LayoutDashboard,
   Users2Icon,
 } from "lucide-react";
+import { useProperty } from "@/context/PropertyContext";
 import { useTenant } from "@/context/TenantContext";
 import { useUnit } from "@/context/UnitsContext";
-// [{ name: "Properties", href: "/dashboard/properties", icon: <BuildingIcon />, count?: number }, ...]
 
 export default function DashboardPage() {
   const { user, isLoading } = useAuth();
-  const { properties } = useProperty();
-  const { tenants } = useTenant();
   const { units } = useUnit();
+  const { tenants } = useTenant();
+  const { properties } = useProperty();
   const router = useRouter();
 
-  // Safe client-side redirect
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.replace("/login?from=/dashboard");
-    }
-  }, [isLoading, user, router]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-[70vh] flex items-center justify-center">
-        <Loading content={"Loading user..."} />
-      </div>
-    );
-  }
-
+  const expectedRent = units.reduce((sum, rent) => {
+    return sum + rent.rent;
+  }, 0);
+  // starts
   const starts = [
-    { name: "Overview", href: "/dashboard", icon: <HomeIcon />, total: "" },
+    {
+      name: "Overview",
+      href: "/dashboard",
+      icon: <LayoutDashboard />,
+      total: undefined,
+    },
     {
       name: "Properties",
       href: "/dashboard/properties",
@@ -59,7 +56,43 @@ export default function DashboardPage() {
       icon: <Users2Icon />,
       total: tenants.length ?? 0,
     },
+
+    {
+      name: "Expected Rent",
+      href: "/dashboard/rent",
+      icon: <CoinsIcon />,
+      total: "ksh:" + " " + expectedRent,
+    },
+
+    {
+      name: "collected Rent",
+      href: "/dashboard/rent",
+      icon: <CircleCheck />,
+      total: 0,
+    },
+
+    {
+      name: "Pending Rent",
+      href: "/dashboard/rents",
+      icon: <BanknoteX />,
+      total: 0,
+    },
   ];
+  // Safe client-side redirect
+  // useEffect(() => {
+  //   if (!isLoading && !user) {
+  //     router.push("/login");
+  //   }
+  // }, [isLoading, user, router]);
+
+  // if (isLoading) {
+  //   return (
+  //     <div className="min-h-[70vh] flex items-center justify-center">
+  //       <Loading content={"Loading user..."} />
+  //     </div>
+  //   );
+  // }
+
   // Render nothing while redirect is happening
   if (!user) {
     return null;
@@ -68,8 +101,8 @@ export default function DashboardPage() {
   return (
     <Suspense fallback={<Loading />}>
       <main className="min-h-screen bg-gray-50/40 py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-8">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <div className="mb-8 shadow p-4">
             <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
               Welcome back,{" "}
               {user.username || user.email?.split("@")[0] || "User"}
@@ -79,22 +112,19 @@ export default function DashboardPage() {
             </p>
           </div>
           {starts && (
-            <div className="grid grid-cols-3 gap-3 md:grid-cols-4">
+            <div className="text-xs md grid grid-cols-3 gap-3 md:grid-cols-4 font-serif">
               {starts.map((start) => (
                 <Link
                   key={start.name}
                   href={start.href}
-                  className="text-xs md:text-lg p-4 border border-gray-200 rounded-md flex flex-col items-center transition hover:border-blue-200"
+                  className="relative md:text-sm px-2 py-6 bg-gray-100 shadow rounded-md flex flex-col items-center transition"
                 >
-                  <span className="text-blue-600 font-extrabold mb-3">
+                  <span className="text-blue-600 font-extrabold mb-1 mt-3">
                     {start.icon}
                   </span>
-                  <span>{start.name}</span>
-                  <p className="text-gray-900 font-bold flex gap-4 items-center">
-                    Total:{" "}
-                    <span className="font-extrabold text-xl">
-                      {start.total}
-                    </span>
+                  <span className="text-gray-600 md:text-sm">{start.name}</span>
+                  <p className="absolute top-1 right-3 text-gray-900 font-sans font-bold flex gap-4 items-center text-xs">
+                    {start.total}
                   </p>
                 </Link>
               ))}

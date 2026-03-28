@@ -1,0 +1,17 @@
+import { NextResponse } from "next/server";
+import twilio from "twilio";
+
+const client = twilio(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN,
+);
+
+export async function GET() {
+  await client.messages.create({
+    from: process.env.TWILIO_WHATSAPP_NUMBER,
+    to: "whatsapp:+254113822842", // your number
+    body: "🧪 TEST: WhatsApp integration working ✅, This massage is from Joseph Mutungi The CEO of Rendama",
+  });
+
+  return NextResponse.json({ message: "Test sent ✅" });
+}

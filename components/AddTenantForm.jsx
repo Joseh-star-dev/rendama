@@ -5,11 +5,17 @@ import { useUnit } from "@/context/UnitsContext";
 import { X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import PhoneInput, {
+  isValidPhoneNumber,
+  PhoneNumber,
+} from "react-phone-number-input/input";
+import SuccessModal from "./SuccessModal";
 
 export default function AddTenantForm({ close, unit_number }) {
   const { properties } = useProperty();
   const { units } = useUnit();
   const { addTenant, loading, message, error } = useTenant();
+  const { successModal, setSuccessModal } = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -21,7 +27,7 @@ export default function AddTenantForm({ close, unit_number }) {
 
   useEffect(() => {
     if (!form.property && properties.length > 0) {
-      setForm((prev) => ({ ...prev, property: properties[0].name }));
+      setForm((prev) => ({ ...prev, property: properties[0]._id }));
     }
 
     if (!form.unitNumber && units.length > 0 && !unit_number) {
@@ -33,31 +39,44 @@ export default function AddTenantForm({ close, unit_number }) {
     const { name, value } = e.target;
 
     setForm((prev) => ({ ...prev, [name]: value }));
-    console.log("property number is", form.property);
-    console.log("unit number is", form.unitNumber);
   };
 
+  const handlePhoneChange = (value) => {
+    setForm((prev) => ({ ...prev, phone: value }));
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!form.phone) {
+      toast.error("Phone number is required");
+      return;
+    }
+
+    if (isValidPhoneNumber(form.phone)) {
+      console.log("Submitting valid number: ", form.phone);
+    } else {
+      toast.error("Please enter a valid kenyan number (9 digits)");
+    }
     try {
       await addTenant(form);
+      setSuccessModal(true);
     } catch (err) {
       console.error(err);
     }
   };
 
   return (
-    <div className="bg-white px-4 py-6 max-w-md mx-auto rounded-md relative">
+    <div className="bg-white px-4 py-2 max-w-md mx-auto rounded-md relative">
       <Toaster />
       {error && (
         <p className="text-red-500 text-lg p-2 font-semibold text-center">
           {error}
         </p>
       )}
-      {message && (
-        <p className="text-green-600 font-semibold text-lg p-2 text-center">
-          {message}
-        </p>
+      {successModal && (
+        <div>
+          <SuccessModal message={message} />
+        </div>
       )}
       <X size={30} onClick={close} className="mb-4 text-gray-700" />
       <h1 className="text-lg mb-5 font-semibold">Add new tenant</h1>
@@ -71,18 +90,19 @@ export default function AddTenantForm({ close, unit_number }) {
             onChange={handleChange}
             placeholder="John Doe"
             className=""
+            required
           />
         </div>
 
         <div className="">
           <label className="">Tenant Phone Number</label>
-          <input
-            type="tel"
-            name="phone"
+          <PhoneInput
+            placeholder="712 345678"
+            country="KE"
+            international={true}
+            withCountryCallingCode
             value={form.phone}
-            onChange={handleChange}
-            placeholder="07** *** ***"
-            className="placeholder:text-2xl"
+            onChange={handlePhoneChange}
           />
         </div>
 
@@ -101,6 +121,7 @@ export default function AddTenantForm({ close, unit_number }) {
               value={form.unitNumber}
               onChange={handleChange}
               className="input-field rounded-md"
+              required
             >
               {units.length > 0 ? (
                 units.map((u) => (
@@ -122,10 +143,11 @@ export default function AddTenantForm({ close, unit_number }) {
             value={form.property}
             onChange={handleChange}
             className="input-field rounded-md"
+            required
           >
             {properties.length > 0 ? (
               properties.map((p) => (
-                <option key={p._id} value={p.name} className="">
+                <option key={p._id} value={p._id} className="">
                   {p.name}
                 </option>
               ))

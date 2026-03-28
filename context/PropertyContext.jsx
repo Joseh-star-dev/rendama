@@ -18,12 +18,9 @@ export function PropertyProvider({ children }) {
       try {
         const res = await api.get("/properties");
         setProperties(res.data);
-        setLoading(false);
         return true;
       } catch (error) {
         console.error(error);
-        setProperties([]);
-        setLoading(false);
       }
     };
     fetchProperties();

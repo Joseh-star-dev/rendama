@@ -11,15 +11,6 @@ export default function DashboardLayout({ children }) {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // // Handle redirect in useEffect (safe for client component)
-  // React.useEffect(() => {
-  //   if (!isLoading && !user) {
-  //     router.replace(
-  //       "/login?redirect=" + encodeURIComponent(window.location.pathname),
-  //     );
-  //   }
-  // }, [isLoading, user, router]);
-
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -34,10 +25,10 @@ export default function DashboardLayout({ children }) {
   }
 
   return (
-    <Suspense fullback={<Loading />}>
-      <div className="min-h-screen bg-gray-50 flex flex-col mx-auto max-w-7xl">
-        <div className="flex flex-1 overflow-hidden">
-          {/* Sidebar */}
+    <div className="min-h-screen bg-gray-50 flex flex-col mx-auto max-w-7xl">
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
+        <Suspense fullback={<Loading />}>
           <aside
             className={`
             fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-gray-300 shadow-lg transform transition-transform duration-300 ease-in-out
@@ -96,21 +87,21 @@ export default function DashboardLayout({ children }) {
               </div>
             </div>
           </aside>
+        </Suspense>
 
-          {/* Main content */}
-          <main className="flex-1 overflow-y-auto bg-white p-4 md:p-8">
-            {/* Overlay for mobile when sidebar is open */}
-            {isSidebarOpen && (
-              <div
-                className="fixed inset-0 bg-black/40 z-40 md:hidden"
-                onClick={() => setIsSidebarOpen(false)}
-              />
-            )}
+        {/* Main content */}
+        <main className="flex-1 overflow-y-auto bg-white p-4 md:p-8">
+          {/* Overlay for mobile when sidebar is open */}
+          {isSidebarOpen && (
+            <div
+              className="fixed inset-0 bg-black/40 z-40 md:hidden"
+              onClick={() => setIsSidebarOpen(false)}
+            />
+          )}
 
-            <div className="max-w-6xl mx-auto">{children}</div>
-          </main>
-        </div>
+          <div className="max-w-6xl mx-auto">{children}</div>
+        </main>
       </div>
-    </Suspense>
+    </div>
   );
 }
