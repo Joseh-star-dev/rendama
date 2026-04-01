@@ -139,6 +139,8 @@ const VerificationSuccess = ({ message }) => {
     </div>
   );
 };
+
+
 export default function VerifyEmail() {
   return (
     <Suspense fallback={<Loading />}>

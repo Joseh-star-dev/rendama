@@ -43,7 +43,7 @@ export default function LoginPage() {
   };
 
   if (error === "Please verify your email!") {
-    return router.push("/resend-verification");
+    return router.push("/email-sent");
   }
   return (
     <main className="py-30  px-4">
