@@ -9,8 +9,8 @@ import React, { Suspense, useEffect, useState } from "react";
 
 const TokenError = ({ error, token }) => {
   return (
-    <div className="min-h-screen bg-black/10 fixed inset-0 py-20 px-4">
-      <div className="p-8 bg-white shadow rounded-md flex flex-col gap-4 mx-w-md mx-auto w-86">
+    <div className="min-h-screen bg-black/10 fixed inset-0 py-20">
+      <div className="p-8  bg-white shadow rounded-md flex flex-col gap-4 mx-w-md mx-auto w-86">
         <h1 className="text-red-500 font-bold text-center text-lg font-serif">
           {error}
         </h1>
@@ -36,32 +36,6 @@ const TokenError = ({ error, token }) => {
   );
 };
 
-export const EmailSentNote = ({ message, closeModal }) => {
-  return (
-    <div className="min-h-screen fixed bg-black/10 insert-0 backdrop-blur-sm flex flex-col w-full">
-      <div className="bg-white shadow p-8 rounded-2xl mx-auto mt-20 flex flex-col items-center">
-        <div className="flex justify-center p-4">
-          <CircleCheckIcon size={50} className="text-green-600" />
-        </div>
-        <h1 className="text-center">
-          {message ? message : "Verification link was send to your email"}
-        </h1>
-        <p className="mb-5 text-gray-500">
-          Click the link in your email to verify your account!
-        </p>
-        <div className="my-4">
-          <Link
-            href="/resend-verification"
-            className="primary-btn p-3"
-            onClick={closeModal}
-          >
-            Resend verification
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 function VerifyContent() {
   const [error, setError] = useState("");

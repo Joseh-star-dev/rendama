@@ -5,7 +5,8 @@ import { Mail } from "lucide-react";
 import { redirect, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { EmailSentNote } from "../verify-email/page";
+import EmailSentNote from "../email-sent/page";
+
 
 export default function resendVerification() {
   const [email, setEmail] = useState("");
