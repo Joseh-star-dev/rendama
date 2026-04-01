@@ -36,7 +36,7 @@ export async function GET(req) {
     const response = NextResponse.json({ message: "Email verified" });
     response.cookies.set("auth-token", jwt, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_APP_URL : "http://192.168.100.107:3000",
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60,
       path: "/",
